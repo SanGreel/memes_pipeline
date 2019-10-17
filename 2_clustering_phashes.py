@@ -22,7 +22,7 @@ from optparse import OptionParser
 
 
 CLUSTERING_THRESHOLD=8.0
-CLUSTERING_MIN_SAMPLES=5
+CLUSTERING_MIN_SAMPLES=2
 # load data to dictionary
 parser = OptionParser()
 parser.add_option("-p", "--phashes", dest='phashes', default='phashes.txt', help="file with phashes")
@@ -60,7 +60,7 @@ phashes_dict = load_phashes(phashes)
 
 def extract_pairs(pair_text, phashes_dict):
     pairs = []
-    els = pair_text.split('-')
+    els = pair_text.split('&')
     if len(els)>2:
         for i in range(len(els)):
             pair = '-'.join(els[0:i])
