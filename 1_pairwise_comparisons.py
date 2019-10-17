@@ -281,8 +281,10 @@ def seek_queue_many(ids, hashes, outdir, blacklist, hashes_diff):
     num_threads = 5
     batch_size = int(len_hashes/num_threads)
     total_tasks = len_hashes - len(blacklist)
-    print(batch_size)
-    print(total_tasks)
+
+    print("batch_size", batch_size)
+    print("total_tasks", total_tasks)
+
     pbar = tf.contrib.keras.utils.Progbar(total_tasks)
 
     # are used to feed data into our queue
@@ -327,7 +329,7 @@ def seek_queue_many(ids, hashes, outdir, blacklist, hashes_diff):
         for j in where:
             j_rel = j[0] 
             j_abs = i+j_rel
-            key_id = ids[i] + '-' + ids[j_abs]
+            key_id = ids[i] + '&' + ids[j_abs]
             hashes_diff[key_id] = diff[j_rel]
 
         seen_images.append(i)
@@ -335,7 +337,10 @@ def seek_queue_many(ids, hashes, outdir, blacklist, hashes_diff):
         if _ % 100000 == 0:
             with open(outdir_tmp, 'w') as outfile:
                 json.dump(hashes_diff, outfile, default=default)
-            progress_file = 'progress.' + outdir_tmp
+            # progress_file = 'progress.' + outdir_tmp
+            outdir_file = os.path.basename(outdir_tmp)
+            outdir_dir = os.path.dirname(outdir_tmp)
+            progress_file = outdir_dir + '/progress.' + outdir_file
             with open(progress_file + '.txt', 'w') as outfile:
                 outfile.write(str(i)+'\n')
             with open(progress_file + '.json', 'w') as outfile:
@@ -413,6 +418,8 @@ def seek_queue_many_device(ids, hashes, outdir, blacklist, hashes_diff, devices,
 
     seen_images = []
     outdir_tmp = outdir + '.tmp' + '.' + str(settings.distributed_machine) + '.' + str(devices.index(device))
+    print (outdir_tmp)
+
     # Fetch the data from the pipeline and put it where it belongs (into your model)
     for _ in range(devices.index(device), len_hashes - 1 - len(blacklist), num_devices):
         # Computing diff
@@ -430,7 +437,10 @@ def seek_queue_many_device(ids, hashes, outdir, blacklist, hashes_diff, devices,
         if _ % 1000 == 0:
             with open(outdir_tmp, 'w') as outfile:
                 json.dump(hashes_diff, outfile, default=default)
-            progress_file = 'progress.' + outdir_tmp
+            # progress_file = 'progress.' + outdir_tmp
+            outdir_file = os.path.basename(outdir_tmp)
+            outdir_dir = os.path.dirname(outdir_tmp)
+            progress_file = outdir_dir + '/progress.' + outdir_file
             with open(progress_file + '.txt', 'w') as outfile:
                 outfile.write(str(i)+'\n')
             with open(progress_file + '.json', 'w') as outfile:
@@ -463,6 +473,8 @@ def read_blacklist(phash_path):
     blacklist = []
     with open(phash_path + '.new.progress') as data_file:    
         blacklist = json.load(data_file)
+
+    print(blacklist)
     blacklist_dic = {}
     for b in blacklist:
         if b not in list(blacklist_dic.keys()):
