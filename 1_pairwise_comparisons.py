@@ -329,8 +329,10 @@ def seek_queue_many(ids, hashes, outdir, blacklist, hashes_diff):
         for j in where:
             j_rel = j[0] 
             j_abs = i+j_rel
-            key_id = ids[i] + '&' + ids[j_abs]
-            hashes_diff[key_id] = diff[j_rel]
+
+            if ids[i] != ids[j_abs]:
+                key_id = ids[i] + '&' + ids[j_abs]
+                hashes_diff[key_id] = diff[j_rel]
 
         seen_images.append(i)
 
