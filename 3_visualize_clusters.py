@@ -19,6 +19,7 @@ plt.switch_backend('agg')
 from matplotlib.backends.backend_pdf import PdfPages
 from optparse import OptionParser
 import os
+import ast
 
 parser = OptionParser()
 parser.add_option("-c", "--clustering", dest='clustering', default='clustering_output.txt',help="file that includes clustering output")
@@ -39,17 +40,23 @@ index_image = pickle.load(open(index_image_file, 'rb'))
 if not os.path.exists(base_dir_output):
     os.makedirs(base_dir_output)
 
-image_index = {}
-for k,v in index_image.items():
-    image_index[v] = k
+# image_index = {}
+# for k,v in index_image.items():
+#     image_index[v] = k
 
 with open(inp_file, 'r') as f:
     for line in f:
-        output_json = json.loads(line)
+        # output_json = json.loads(line)
+        output_json = ast.literal_eval(line)
+
         cluster = output_json['cluster_no']
         if cluster == -1:
             continue
-        part = 0   
+        part = 0
+
+        if os.path.isfile(base_dir_output + 'cluster'+str(cluster)+'.pdf'):
+            continue
+
         pdf = PdfPages(base_dir_output + 'cluster'+str(cluster)+'.pdf')
 
         images_in_cluster = output_json['images']
@@ -68,13 +75,15 @@ with open(inp_file, 'r') as f:
         images_added = []
         for i, image in enumerate(images_in_cluster):
             path = image
-            img=mpimg.imread(path)
+            # img=mpimg.imread(path)
+            img = plt.imread(path, 0)
+
             try:
                flag = False
-               for im in images_added:
-                   if distance_matrix[image_index[image], image_index[im]] == 0.00000000000001:
-                        flag=True
-                        break
+               # for im in images_added:
+                   # if distance_matrix[image_index[image], image_index[im]] == 0.00000000000001:
+                   #      flag=True
+                   #      break
                if flag==False: 
                     plt.subplot(12 / columns + 1, columns, count % 12 + 1)
                     plt.imshow(img)

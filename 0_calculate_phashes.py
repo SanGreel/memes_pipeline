@@ -16,6 +16,10 @@ import itertools
 import imagehash
 from optparse import OptionParser
 
+num_workers = 16
+
+
+
 parser = OptionParser()
 parser.add_option("-d", "--directory", dest='directory', help="directory that contains the images to calculate phashes")
 parser.add_option("-o", "--output", dest='output', default='phashes.txt',help="file to store the phashes")
@@ -25,7 +29,8 @@ parser.add_option("-o", "--output", dest='output', default='phashes.txt',help="f
 IMAGE_DIR = options.directory
 HASHES = options.output
 
-num_workers = 8
+
+
 try:
     imagehash_version = float(imagehash.__version__)
 except AttributeError:

@@ -21,8 +21,11 @@ import pickle
 from optparse import OptionParser
 
 
-CLUSTERING_THRESHOLD=8.0
-CLUSTERING_MIN_SAMPLES=2
+N_JOBS = 16
+CLUSTERING_THRESHOLD=11.99
+CLUSTERING_MIN_SAMPLES=3
+
+MAX_DISTANCE = 20
 # load data to dictionary
 parser = OptionParser()
 parser.add_option("-p", "--phashes", dest='phashes', default='phashes.txt', help="file with phashes")
@@ -138,7 +141,7 @@ def print_clusters_to_file(clustering_output, filename):
     output.close()
     return output_json
 
-clustering = DBSCAN(eps=CLUSTERING_THRESHOLD, metric='precomputed', n_jobs=8, min_samples=CLUSTERING_MIN_SAMPLES).fit(distance_matrix.tocsr())
+clustering = DBSCAN(eps=CLUSTERING_THRESHOLD, metric='precomputed', n_jobs=N_JOBS, min_samples=CLUSTERING_MIN_SAMPLES).fit(distance_matrix.tocsr())
 num_clusters = len(dict(Counter(clustering.labels_)).keys())
 print("Number of clusters  = %d " %(num_clusters-1))
 

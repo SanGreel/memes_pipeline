@@ -22,7 +22,7 @@ import numpy as np
 tf.app.flags.DEFINE_integer("batch_size", 4000000, "Search batch size")
 FLAGS = tf.app.flags.FLAGS
 
-DISTANCE_THRESHOLD = 10
+DISTANCE_THRESHOLD = 14
 DEBUG = False
 
 config=tf.ConfigProto() #allow_soft_placement=True, log_device_placement=True
