@@ -63,7 +63,10 @@ with open(inp_file, 'r') as f:
         
         images_num = len(images_in_cluster)
         print("Cluster = %d Images = %d" %(cluster, images_num))
-        
+
+        # if images_num > 200:
+        #     continue
+
         plt.figure(figsize=(40 ,30))
         plt.rc('text', usetex=False)
         plt.suptitle( "Images in cluster #" + str(cluster) + " = " + str(len(images_in_cluster)), fontsize=50)
