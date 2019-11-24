@@ -22,7 +22,13 @@ import numpy as np
 tf.app.flags.DEFINE_integer("batch_size", 4000000, "Search batch size")
 FLAGS = tf.app.flags.FLAGS
 
+
+# regular one
 DISTANCE_THRESHOLD = 14
+
+# template post rpoc
+# DISTANCE_THRESHOLD = 20
+
 DEBUG = False
 
 config=tf.ConfigProto() #allow_soft_placement=True, log_device_placement=True
@@ -149,7 +155,7 @@ def seek_sequential(hashes, outdir):
     hash_i = tf.placeholder(tf.bool, shape=[64])
     hashes_j = tf.placeholder(tf.bool, shape=[None, 64])
 
-    diff_op = tf.count_nonzero(tf.not_equal(hash_i, hashes_j), 1) 
+    diff_op = tf.count_nonzero(tf.not_equal(hash_i, hashes_j), 1)
     pbar.update(0)
 
     with tf.train.MonitoredSession() as sess: 

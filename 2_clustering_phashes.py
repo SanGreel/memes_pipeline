@@ -22,8 +22,15 @@ from optparse import OptionParser
 
 
 N_JOBS = 16
+
+# regular one
 CLUSTERING_THRESHOLD=9.9
 CLUSTERING_MIN_SAMPLES=3
+
+# template post rpoc
+# CLUSTERING_THRESHOLD=16
+# CLUSTERING_MIN_SAMPLES=2
+
 
 MAX_DISTANCE = 20
 # load data to dictionary
